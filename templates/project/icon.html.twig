@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{label}}{% endblock %}
+
+{% block body %}
+
+<div id="alert-div"></div>
+
+<div class="mt-5">
+
+  {{ form_start(form) }}
+
+  <div class="form-group">
+    {{ form_label(form.icon) }}
+    {{ form_widget(form.icon, { 'attr': {'class' : 'form-control'} }) }}
+  </div>
+
+  <div>
+    {{ form_widget(form.save, { 'attr': {'class' : 'btn btn-primary'}, 'label': label }) }}
+  </div>
+
+  {{ form_end(form) }}
+
+</div>
+
+<div class="mt-5">
+  <button data-url={{ path('ajax_edit_produceItem', {id: app.request.attributes.get('id')} )}} class="btn btn-secondary" id="ajax-update">
+    Update with ajax
+  </button>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+{{ parent() }}
+<script>
+  $(document).ready(function()) {
+  $('#ajax-update').click(function(e) {
+
+  });
+    let produceItem = $('#produceItem').val();
+
+    $.ajax({
+      url: $(this).data('url')
+      method: 'PUT',
+      data: { Name of the item: produceItem}
+    }).done(function() {
+      $('#alert-div').html('<div class="alert alert-success p-5">Success!</div>');
+    })
+  });
+</script>
+{% enblock %}

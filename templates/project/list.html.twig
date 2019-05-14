@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listing All Produce Items{% endblock %}
+
+{% block body %}
+
+<ul class="mt-5">
+
+{% for produceItem in produceItems %}
+
+  <li id="{{produceItem.id}}-list-item"> {{produceItem.name}} {{produceItem.expiration_date}} {{produceItem.icon}}
+    <a href="{{ path('edit_produceItem', { id: produceItem.id }) }}"></a>
+      <i class="fas fa-pencil-alt text-primary"></i>
+    <span data-url={{ path('delete_produceItem', { id: produceItem.id }) }} id="{{produceItem.id}}">
+      <i class="fas fa-minus-circle text-danger"></i>
+    </span>
+  </li>
+
+{% endfor %}
+
+</ul>
+
+<a href="{{ path("produceItem_download") }}" class="btn btn-info mt-5">
+  <i class="fas fa-file-download"></i>
+</a>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$(document).ready(function() {
+    $('ul li span').click(function(e) {
+    let produceItem_id = $(this).attr('id');
+
+    $.ajax({
+      url: $(this).data('url'),
+      method: 'DELETE'
+    }).done(function() {
+      $('#'+produceItem_id+'-list-item').hide();
+    });
+
+  })
+});
+</script>
+{% endblock %}
